@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>🐍 Plasma Snake</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="background" aria-hidden="true"></div>
+
+  <!-- Модалка 1: Привітання -->
+  <div id="welcomeModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle" aria-describedby="welcomeDesc">
+    <div class="modal-content">
+      <h2 id="welcomeTitle">Welcome to Plasma Snake 🐍</h2>
+      <p id="welcomeDesc">
+        Redefining how money moves.<br />
+        Purpose-built blockchain for stablecoin payments.<br />
+        Built on Bitcoin.<br /><br />
+        Join us:
+        <a href="https://discord.gg/plasmafdn" target="_blank" rel="noopener noreferrer">Discord</a> |
+        <a href="https://x.com/PlasmaFDN" target="_blank" rel="noopener noreferrer">X (Twitter)</a>
+      </p>
+      <button id="continueBtn">Continue</button>
+    </div>
+  </div>
+
+  <!-- Модалка 2: Введення імені -->
+  <div id="nameModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="nameTitle" aria-describedby="nameDesc" style="display:none;">
+    <div class="modal-content">
+      <h2 id="nameTitle">Enter Your Name</h2>
+      <p id="nameDesc">Please enter your name to start the game:</p>
+      <input id="modalUsername" type="text" placeholder="Your name" maxlength="15" autocomplete="off" />
+      <button id="startBtn" disabled>Start Game</button>
+    </div>
+  </div>
+
+  <div class="container" role="main" aria-label="Game and leaderboard">
+    <section class="game-section" aria-label="Snake game and controls">
+      <h1>🐍 Plasma Snake</h1>
+      <canvas id="game" width="400" height="400" aria-label="Snake game canvas"></canvas>
+      <div class="info" aria-live="polite" aria-atomic="true">
+        <p>Score: <span id="score">0</span></p>
+
+        <input id="username" placeholder="Your name" aria-label="Enter your name" autocomplete="off" readonly />
+        <button class="glow-button" onclick="submitScore()">💾 Submit Score</button>
+
+        <div class="controls">
+          <button class="glow-button" onclick="startGame()">▶️ Start</button>
+          <button class="glow-button" onclick="pauseGame()">⏸️ Pause</button>
+          <button class="glow-button" onclick="resumeGame()">🔁 Resume</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="leaderboardContainer" aria-label="Leaderboard" role="region">
+      <h2>🏆 Leaderboard</h2>
+      <ul id="leaderboard"></ul>
+      <div id="rating">Top 10 Players</div>
+    </section>
+  </div>
+
+  <script src="/static/snake.js" defer></script>
+  <script>
+    // Фон з надписами plasma
+    const bg = document.querySelector('.background');
+    const count = 150;
+    for (let i = 0; i < count; i++) {
+      const span = document.createElement('span');
+      span.textContent = "plasma";
+      span.style.left = `${Math.random() * 100}vw`;
+      span.style.top = `${Math.random() * 100}vh`;
+      span.style.fontSize = `${5 + Math.random() * 7}px`;
+      span.style.animationDuration = `${10 + Math.random() * 25}s`;
+      span.style.animationDelay = `${Math.random() * 30}s`;
+      span.style.transform = `rotate(${Math.random() * 360}deg)`;
+      bg.appendChild(span);
+    }
+
+    // Модалки логіка
+    document.addEventListener("DOMContentLoaded", () => {
+      const welcomeModal = document.getElementById("welcomeModal");
+      const continueBtn = document.getElementById("continueBtn");
+      const nameModal = document.getElementById("nameModal");
+      const startBtn = document.getElementById("startBtn");
+      const modalUsername = document.getElementById("modalUsername");
+      const inputUsername = document.getElementById("username");
+      const gameCanvas = document.getElementById("game");
+
+      // Спочатку показуємо привітальну модалку, блуруємо фон
+      welcomeModal.style.display = "flex";
+      gameCanvas.style.filter = "blur(4px)";
+
+      continueBtn.onclick = () => {
+        welcomeModal.style.display = "none";
+        nameModal.style.display = "flex";
+        modalUsername.focus();
+      };
+
+      modalUsername.addEventListener("input", () => {
+        startBtn.disabled = modalUsername.value.trim().length === 0;
+      });
+
+      startBtn.onclick = () => {
+        const name = modalUsername.value.trim();
+        if (name.length === 0) return;
+        inputUsername.value = name;
+        nameModal.style.display = "none";
+        gameCanvas.style.filter = "none";
+        startGame();
+      };
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,322 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  background: #001d12;
+  font-family: 'Courier New', monospace;
+  color: #00ff88;
+  overflow: hidden; /* Забираємо скрол сторінки */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  user-select: none;
+  padding-top: 30px;
+}
+
+.background {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: -1;
+}
+
+.background span {
+  position: absolute;
+  color: rgba(0, 255, 136, 0.12);  /* Яскравіший колір */
+  font-weight: 900;                /* Товстіший шрифт */
+  text-transform: uppercase;
+  user-select: none;
+  white-space: nowrap;
+  font-size: 16px;                 /* Збільшений розмір шрифту */
+  letter-spacing: 3px;
+
+  filter:
+    drop-shadow(0 0 2px #00ff88)
+    drop-shadow(0 0 6px #00ff88); /* Потужніша неонова тінь */
+
+  animation-name: plasmaFloat;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: normal;
+}
+
+@keyframes plasmaFloat {
+  0% {
+    transform: translateX(100vw) translateY(0) rotate(0deg);
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateX(-50vw) translateY(0) rotate(10deg);
+    opacity: 0.2;
+  }
+}
+
+
+/* Контейнер гри і лідерборду, компактніше та вирівняно по центру */
+.container {
+  max-width: 700px;
+  width: 100%;
+  display: flex;
+  gap: 25px;
+  justify-content: center;
+  align-items: center; /* Вирівнювання по вертикалі */
+  color: #00ff88;
+  padding: 0 10px;
+}
+
+/* Заголовок гри менший */
+.game-section h1 {
+  margin-bottom: 10px;
+  font-size: 2.2rem;
+  text-shadow: 0 0 8px #00ff88;
+  user-select: none;
+}
+
+/* Зменшене поле гри */
+canvas#game {
+  border-radius: 16px;
+  box-shadow:
+    0 0 24px #00ff88,
+    inset 0 0 16px #00ff88;
+  background-color: #003323;
+  image-rendering: pixelated;
+  width: 360px;
+  height: 360px;
+}
+
+/* Інформація під ігровим полем */
+.info {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.info p {
+  font-size: 1.1rem;
+  margin: 8px 0 6px 0;
+}
+
+input#username {
+  width: 90%;
+  padding: 8px;
+  font-size: 1rem;
+  border-radius: 7px;
+  border: none;
+  background: #004733;
+  color: #00ff88;
+  box-shadow: 0 0 4px #00ff88 inset;
+  outline: none;
+  transition: box-shadow 0.3s ease;
+  margin-bottom: 10px;
+  user-select: text;
+}
+
+input#username:focus {
+  box-shadow: 0 0 12px #00ff88 inset;
+}
+
+.glow-button {
+  padding: 8px 18px;
+  font-size: 1rem;
+  font-weight: 700;
+  background: #004733;
+  color: #00ff88;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow:
+    0 0 12px #00ff88,
+    0 0 25px #00ff88;
+  transition: box-shadow 0.4s ease;
+  user-select: none;
+  animation: flicker 3s infinite;
+  margin: 5px 0;
+  width: 90%;
+  max-width: 260px;
+  text-align: center;
+}
+
+.glow-button:hover {
+  box-shadow:
+    0 0 25px #00ff88,
+    0 0 40px #00ff88,
+    0 0 60px #00ff88;
+}
+
+@keyframes flicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+    opacity: 1;
+  }
+  20%, 22%, 24%, 55% {
+    opacity: 0.85;
+  }
+}
+
+.controls {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Лідерборд праворуч, компактний та трохи зменшений */
+#leaderboardContainer {
+  width: 260px;
+  background: #003322cc;
+  border-radius: 20px;
+  padding: 18px 16px;
+  box-shadow: 0 0 25px #00ff88aa inset;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-height: 360px; /* по висоті з грою */
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  color: #00ff88;
+  font-size: 0.9rem;
+}
+
+#leaderboardContainer h2 {
+  margin-top: 0;
+  font-size: 1.8rem;
+  text-shadow: 0 0 10px #00ff88;
+  margin-bottom: 10px;
+  user-select: none;
+}
+
+#leaderboard {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+#leaderboard li {
+  background: #004733cc;
+  padding: 8px 14px;
+  border-radius: 14px;
+  box-shadow:
+    0 0 10px #00ff88,
+    inset 0 0 5px #00ff88;
+  font-weight: 600;
+  font-size: 0.95rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #00ff88;
+  transition: background-color 0.3s ease;
+  margin-bottom: 8px;
+  user-select: none;
+}
+
+#leaderboard li:hover {
+  background: #00ff88;
+  color: #002811;
+  cursor: default;
+}
+
+#rating {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  color: #00aa66;
+  user-select: none;
+}
+
+.modal-content a {
+  color: #004422;
+  text-decoration: underline;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.modal-content a:hover,
+.modal-content a:focus {
+  color: #00cc66;
+  outline: none;
+}
+
+/* Модальні вікна стилі - трохи менші */
+.modal-content {
+  background: #002f1a;
+  border-radius: 18px;
+  padding: 25px 25px 35px 25px;
+  width: 320px;
+  box-shadow: 0 0 28px #00ff88;
+  color: #00ff88;
+  text-align: center;
+}
+
+.modal-content h2 {
+  margin-bottom: 16px;
+  font-size: 1.7rem;
+  text-shadow: 0 0 10px #00ff88;
+}
+
+.modal-content p {
+  margin-bottom: 22px;
+  line-height: 1.4;
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 9px;
+  border: none;
+  background: #004733;
+  color: #00ff88;
+  box-shadow: 0 0 8px #00ff88 inset;
+  outline: none;
+  margin-bottom: 12px;
+  user-select: text;
+}
+
+.modal-content input:focus {
+  box-shadow: 0 0 18px #00ff88 inset;
+}
+
+.modal-content button {
+  cursor: pointer;
+  padding: 10px 22px;
+  font-size: 1.1rem;
+  border-radius: 12px;
+  background: #00ff88;
+  color: #002811;
+  border: none;
+  box-shadow: 0 0 22px #00ff88;
+  font-weight: 700;
+  transition: background 0.3s ease;
+  user-select: none;
+}
+
+.modal-content button:hover {
+  background: #00cc66;
+}
+
+/* Адаптив */
+@media(max-width: 720px) {
+  .container {
+    flex-direction: column;
+    max-width: 95vw;
+  }
+  #leaderboardContainer {
+    max-height: 250px;
+    width: 95vw;
+    margin-top: 20px;
+  }
+  canvas#game {
+    width: 95vw;
+    height: 95vw;
+  }
+}
